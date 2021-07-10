@@ -33,17 +33,18 @@ def get_ip(html):
 
 
 def main():
-    #url_1 = 'https://www.avito.ru/rostov-na-donu/tovary_dlya_kompyutera?p=1&q=видеокарты'
+    url = 'https://www.avito.ru/rostov-na-donu/tovary_dlya_kompyutera?p=1&q=видеокарты'
     #url = 'http://sitespy.ru/my-ip' #https://youtu.be/MKq3u9NbpYE
-    url = 'https://www.ip-adress.com/proxy-list'
+    #url = 'https://www.ip-adress.com/proxy-list'
     #useragents = open('useragents.txt').read().split('\n')
     proxies = open('proxies').read().split('\n')
     print(type(proxies), proxies)
 
     for proxy in proxies: #Проверяем и выбираем первый попавший рабочий прокси
         prox_elem={'http': 'http://'+proxy}
-        print(prox_elem)
+        print(f'Proxy elem {prox_elem}')
         r = requests.get(url, proxies=prox_elem)
+        print(f'Resultat r {r}')
         if r.status_code == requests.codes['ok']:
             print(r.text)
             print("ОК!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")

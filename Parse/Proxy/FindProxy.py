@@ -1,5 +1,6 @@
 import requests
 import random
+import time
 from bs4 import BeautifulSoup as bs
 
 ################
@@ -53,10 +54,20 @@ for i in range(len(free_proxies)):
 #
 
 #Проверим отправив запрос на веб‑сайт, который возвращает наш IP‑адрес:
+#proxiess=get_session(free_proxies)
 for i in range(5):
-    s = get_session(free_proxies) #(proxies)
+    s = get_session(free_proxies)
+#    time.sleep(3)
     try:
         print("Страница запроса с IP:", s.get("http://icanhazip.com", timeout=1.5).text.strip())
+    except Exception as e:
+        continue
+
+for i in range(30):
+    s = get_session(free_proxies)
+    time.sleep(3)
+    try:
+        print(f"Страница {i} запроса с IP:", s.get("http://icanhazip.com", timeout=1.5).text.strip())
     except Exception as e:
         continue
 

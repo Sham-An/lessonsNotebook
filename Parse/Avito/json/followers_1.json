@@ -1,1 +1,1 @@
-{"data":{"user":{"edge_followed_by":{"count":1731,"page_info":{"has_next_page":false,"end_cursor":null},"edges":[]}}},"status":"ok"}
+{"error":{"code":403,"message":"Доступ с вашего IP-адреса временно ограничен"}}

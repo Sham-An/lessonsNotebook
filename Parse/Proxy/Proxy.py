@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from random import choice
 #from lxml import html
+#Возвращает адрес http://icanhazip.com/
 
 #https://youtu.be/MKq3u9NbpYE?t=1177
 #https://youtu.be/MKq3u9NbpYE?t=2083

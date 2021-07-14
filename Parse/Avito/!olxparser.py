@@ -63,7 +63,8 @@ class OlxParser:
 
         url_last = str('https://www.avito.ru')+html_tree.xpath(path)[1].get('href')
 
-        print(len(offers),html_tree, url_last) # offers)
+        #print(f'Offers {len(offers)},{html_tree}, {url_last}') # offers)
+        print(len(offers),html_tree, url_last)  # offers)
 
         try:
             last_offer = html_tree.xpath(path)[1]

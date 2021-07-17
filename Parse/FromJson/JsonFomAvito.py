@@ -62,7 +62,7 @@ for item in data['data']:
 
 
 #Записываем файл
-with open("avito_city2.json",'w') as file:
+with open("avito_city2.json", 'w') as file:
         json.dump(data,file,indent=3) #indent добавляет структурированность с отступами =3
 
 with open("avito_city2.json") as file:

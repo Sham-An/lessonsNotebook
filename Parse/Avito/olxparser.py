@@ -9,8 +9,8 @@ import threading
 
 # Debag part 2 переменные https://youtu.be/HpJYVIRuQbU
 # Debag part 3 изменение брекпоинтов на принт https://youtu.be/QA_aGDIHakA
-# Condition условие остановки если (переменная >= )
-# Evaluate and log вывод в консоль строки формата f" текст {переменная}  "
+# DEBAG Condition условие остановки если (переменная >= )
+# DEBAG Evaluate and log вывод в консоль строки формата f" текст {переменная}  "
 #https://youtu.be/n6x1pzlRK8A?t=1784 (30:43)
 class OlxParser:
 

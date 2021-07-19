@@ -1,0 +1,61 @@
+Вставить запрос с переменными postgresql python
+
+Я пытаюсь вставить несколько переменных в запрос insert на postgres с помощью python. Я не могу понять, как использовать форматирование строк.
+
+Например, это прекрасно работает:
+
+cursor.execute('''CREATE TABLE %s
+ (id SERIAL PRIMARY KEY,
+ sender varchar(255) not null,
+ receiver varchar(255) not null,
+ message varchar(255))''' %username)
+
+как и это:
+
+cursor.execute('''INSERT INTO test (sender, receiver, message)
+VALUES(%s,%s,%s)''', (sender, receiver,message))
+
+Моя проблема в том, что я тоже хочу иметь имя таблицы в качестве переменной. Я пытался:
+
+cursor.execute('''INSERT INTO %s (sender, receiver, message)
+VALUES(%s,%s,%s)''' %username, (sender, receiver, message))
+
+Я получаю следующую ошибку:
+
+    TypeError: недостаточно аргументов для строки формата
+
+Я понимаю, что должен как-то изменить скобки, но не знаю как.
+
+
++++++++++++++++++++++++++++++++++++++++++++++
+1/
+Вы неправильно передаете аргументы. Переданные аргументы причиняют вам неприятности.
+Используйте функцию форматирования вместо%, так как она более сложная и читабельная.
+
+"INSERT INTO {} (sender, receiver, message) VALUES({},{},{})".format("some", "world", "world","hello")
+
+Вывод из вышеизложенного:
+
+'INSERT INTO some (sender, receiver, message) VALUES(world,world,hello)'
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2/
+Используйте модуль высокого уровня sql , чтобы избежать вероятных ошибок:
+
+from psycopg2 import sql
+
+query = sql.SQL('''
+    insert into {} (sender, receiver, message)
+    values (%s, %s, %s)
+''').format(sql.Identifier(username))
+
+cursor.execute (query, (sender, receiver, message))
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+3/
+Подстановка с коннектором pcycopg2:
+
+values = ({'id': 1, 'name':'Vasya', 'age': 45})
+cursor.execute("INSERT INTO tableName(id, name, age) VALUES (%(id)s,%(name)s,%(age)s)", values)
+
+
+

@@ -4,7 +4,7 @@ import json
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-def region_list_from_db():
+def city_list_from_db():
     con = psycopg2.connect(
         database="postgres",
         user="postgres",
@@ -16,17 +16,17 @@ def region_list_from_db():
 
     print("Database opened successfully")
     cur = con.cursor()
-    cur.execute("SELECT id, name from AVITO_REGION")
+    cur.execute("SELECT id, name,parent_Id from AVITO_city")
 
     rows = cur.fetchall()
     for row in rows:
-        print("id =", row[0], " NAME =", row[1])
+        print("id =", row[0], " NAME =", row[1], "parent_Id =", row[2])
         #print("NAME =", row[1])
 
     print("Operation done successfully")
     con.close()
 
-def region_from_js_to_db():
+def city_from_js_to_db():
     con = psycopg2.connect(
         database="postgres",
         user="postgres",
@@ -38,15 +38,15 @@ def region_from_js_to_db():
 
     print("Database opened successfully")
     cur = con.cursor()
-    with open("json/avito_region.json") as file:
+    with open("json/avito_city.json") as file:
         data = json.load(file)
     for item in data['data']:
-        print(f"Сохраненный {item['id']} = {item['name']}")
-        id_reg = item['id']
-        name_reg = item['name']
-        values = ({'id': item['id'], 'name': item['name']})
+        print(f"Сохраненный {item['id']} = {item['name']} регион {item['parent_Id']}")
+        #id_reg = item['id']
+        #name_reg = item['name']
+        values = ({'id': item['id'], 'name': item['name'], 'parent_Id': item['parent_Id']})
         cur.execute(
-            "INSERT INTO AVITO_REGION (id,NAME) VALUES (%(id)s,%(name)s)", values
+            "INSERT INTO AVITO_city (id,NAME,parent_Id) VALUES (%(id)s,%(name)s,%(parent_Id)s)", values
         )
 #        values = ({'id': 1, 'name': 'Vasya', 'age': 45})
 #        cursor.execute("INSERT INTO tableName(id, name, age) VALUES (%(id)s,%(name)s,%(age)s)", values)
@@ -54,7 +54,7 @@ def region_from_js_to_db():
         print("Record inserted successfully")
 
 
-def create_region_db():
+def create_city_db():
     con = psycopg2.connect(
         database="postgres",
         user="postgres",
@@ -66,9 +66,9 @@ def create_region_db():
 
     print("Database opened successfully")
     cur = con.cursor()
-    cur.execute('''CREATE TABLE AVITO_REGION
+    cur.execute('''CREATE TABLE AVITO_city
         (id INT PRIMARY KEY NOT NULL,
-         NAME TEXT NOT NULL);''')
+         NAME TEXT NOT NULL, parent_Id INT NOT NULL);''')
 
     print("Table created successfully")
     con.commit()
@@ -83,8 +83,6 @@ def print_hi(name):
 if __name__ == '__main__':
     print_hi('PyCharm')
     print_hi('PyCharm3')
-    #create_region_db()
-    #region_from_js_to_db()
-    region_list_from_db()
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    #create_city_db()
+    #city_from_js_to_db()
+    city_list_from_db()

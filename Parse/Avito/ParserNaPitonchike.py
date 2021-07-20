@@ -1,8 +1,15 @@
-#адрес статьи https://lolz.guru/threads/1634990/
-#док авито API https://rest-app.net/api
-#Region https://rest-app.net/api/region
-#https://rest-app.net/api/city
-#категории https://m.avito.ru/api/2/search/main?key=af0deccbgcgidddjgnvljitntccdduijhdinfgjgfjir&locationId=650400
+# В общем, писал я для одной дамы этот парсер, но в итоге она НЕОЖИДАННО слилась.
+#
+# Инструкции:
+# первый метод: get_region_id_by_name - принимает аргрумент названия города, возвращает id города
+# второй метод: get_all_categories_by_region_id - выдает ВСЕ существующие категории в этом городе. вход - id города
+# третий метод get_adds_list - принимает на вход ВСЕ категории, которые мы получили из метода get_all_categories_by_region_id, id региона и название нужной нам рубрики, например Квартиры(можно тоже через id сделать). На выходе у нас список из 50 обьявлен в заданной категории. И ВСЯ информация о них
+# и последний get_add_info_by_id - принимает на вход id обьявления, на выход ВСЮ информацию о нем
+#
+# req:
+# python 3.8 >
+#
+# Code:
 
 import requests
 from urllib.request import quote
@@ -10,7 +17,8 @@ from urllib.request import unquote
 from datetime import datetime
 from math import floor
 from time import sleep
-#from time import time
+from time import time
+
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -62,26 +70,23 @@ class HttpParser:
             'https://m.avito.ru/api/9/items?key=af0deccbgcgidddjgnvljitntccdduijhdinfgjgfjir&'
             f'lastStamp={time}&locationId={region_id}&categoryId={category_id}&page=1&display=list&limit=1'
         )
-        print('_______json_content_____time_')
-        print(time)
-        print(f'lastStamp={time}&locationId={region_id}&categoryId={category_id}&page=1&display=list&limit=1')
-
 
         if json_content is None:
             return None
-        print('_______json_content________')
-        print(json_content)
 
-        item = json_content['result']['seo']#['shops']
-        print("item")
-        print(item)
+        print(f'json_content {json_content}')
 
-        ##lnk=json_content['item']['value']['uri_mweb']
-        ##print(f"uri {lnk}")
-        link = item['uri_mweb']
-        link = lnk #item['uri']
-        print("++++link")
-        print(link)
+        item = json_content['result']['items'][0]['value']['uri_mweb']
+        print(f'item result items 0 value uri_mweb= {item}')
+
+
+        item = json_content['result']['items']
+        print(f'item result items = {item}')
+
+
+        item = json_content['result']['seo']
+        print(f'item result seo = {item}')
+        link = item['canonicalUrl']
 
         return link
 
@@ -112,8 +117,6 @@ class HttpParser:
     @staticmethod
     def get_all_categories_by_region_id(region_id):
         json_content = HttpParser.get_json_by_request(f'{HttpParser.avito_urls[HttpParser.CATEGORIES_INFO]}{region_id}')
-        print("json_content")
-        print(json_content)
         main_categories = json_content['categories']
 
         output_categories = {}
@@ -121,19 +124,14 @@ class HttpParser:
         for parent_category in main_categories[1:]:
             parent_id = parent_category['id']
             parent_name = parent_category['name']
-            print("parent id")
-            #print(parent_id )
-            #print(parent_name)
 
             category_link = HttpParser.get_category_link_by_id(region_id, parent_id)
-            print(category_link)
 
             if category_link is not None:
                 output_categories[parent_name] = {
                     'id': parent_id,
                     'link': category_link
                 }
-                print("output_categories")
 
             for child_category in parent_category['children']:
                 child_id = child_category['id']
@@ -153,8 +151,6 @@ class HttpParser:
                         'link': sub_category_link
                     }
 
-        print("OutputCategories")
-        print(output_categories)
         return output_categories
 
     @staticmethod
@@ -228,15 +224,16 @@ class HttpParser:
         return adds_list
 
 
-#region_id = '650400' #HttpParser.get_region_id_by_name('Казань')
-
 region_id = HttpParser.get_region_id_by_name('Казань')
-print(f"region_id {region_id}")
+print(f'Region {region_id}')
 all_categories = HttpParser.get_all_categories_by_region_id(region_id)
-print(f"all_categories {all_categories}")
-####print(all_categories)
 all_adds = HttpParser.get_adds_list('Квартиры', region_id, all_categories, limit_shows=50)
-#example_add = HttpParser.get_add_info_by_id(1861843197) #	142744
-example_add = HttpParser.get_add_info_by_id(142744)
+example_add = HttpParser.get_add_info_by_id(1861843197)
+
+
+print(all_categories)
 print(all_adds)
-#print(example_add)
+print(example_add)
+
+# Telegram: @xmm_0
+

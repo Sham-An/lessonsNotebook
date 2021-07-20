@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 
 #https://youtu.be/7hn1_t2ZtJQ
 
+#DOK API URL https://api.avito.ru/docs/api.html?_ga=2.74857298.1918834032.1626702517-1059290082.1623591324#operation/getResume%202.0
 #url=https://rest-app.net/api
 #Категории
 #//*[@id="wrapper"]/section/div/div/div[1]/div/div[3]/div[3]/div/div/div/table/tbody/tr[3] таблица категории (транспорт, недвижимость...)

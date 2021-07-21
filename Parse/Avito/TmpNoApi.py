@@ -25,7 +25,7 @@ def except_error(res): # Эту функцию можно дополнить, н
 
 s = requests.Session()                          # Будем всё делать в рамках одной сессии
 # Задаем заголовки:
-proxiess = {'http': '79.143.225.152:60517'} #79.143.225.152:60517
+proxiess = {'http': '185.170.215.228:80'} #79.143.225.152:60517
 UA = UserAgent().random
 
 headers = { 'authority': 'm.avito.ru',

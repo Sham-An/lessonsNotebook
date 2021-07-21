@@ -65,28 +65,39 @@ class HttpParser:
 
     @staticmethod
     def get_category_link_by_id(region_id, category_id):
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print(f'region_id, category_id {region_id}, {category_id}')
         time = floor(datetime.timestamp(datetime.now().replace(second=0, microsecond=0)))
         json_content = HttpParser.get_json_by_request(
             'https://m.avito.ru/api/9/items?key=af0deccbgcgidddjgnvljitntccdduijhdinfgjgfjir&'
             f'lastStamp={time}&locationId={region_id}&categoryId={category_id}&page=1&display=list&limit=1'
         )
+        get_request = ('https://m.avito.ru/api/9/items?key=af0deccbgcgidddjgnvljitntccdduijhdinfgjgfjir&'f'lastStamp={time}&locationId={region_id}&categoryId={category_id}&page=1&display=list&limit=1')
+        print(f'CCЫЛЬ == {get_request}')
 
         if json_content is None:
             return None
 
         print(f'json_content {json_content}')
+###################
+        try:
+            item = json_content['result']['items'][0]['value']['uri_mweb']
+        except:
+            return None
+###################
 
-        item = json_content['result']['items'][0]['value']['uri_mweb']
-        print(f'item result items 0 value uri_mweb= {item}')
+        lnk='https://avito.ru'+item
+        print(f'item result items 0 value uri_mweb= {item} == {lnk}')
+        link = lnk
 
 
-        item = json_content['result']['items']
-        print(f'item result items = {item}')
-
-
-        item = json_content['result']['seo']
-        print(f'item result seo = {item}')
-        link = item['canonicalUrl']
+        # item = json_content['result']['items']
+        # print(f'item result items = {item}')
+        #
+        #
+        # item = json_content['result']['seo']
+        # print(f'item result seo = {item}')
+        #link = item['canonicalUrl']
 
         return link
 
@@ -155,6 +166,7 @@ class HttpParser:
 
     @staticmethod
     def get_add_json_info_by_id(add_id):
+        print(f'add_id {add_id}')
         json_content = HttpParser.get_json_by_request(
             f'https://m.avito.ru/api/14/items/{add_id}?key=af0deccbgcgidddjgnvljitntccdduijhdinfgjgfjir'
         )
@@ -228,7 +240,7 @@ region_id = HttpParser.get_region_id_by_name('Казань')
 print(f'Region {region_id}')
 all_categories = HttpParser.get_all_categories_by_region_id(region_id)
 all_adds = HttpParser.get_adds_list('Квартиры', region_id, all_categories, limit_shows=50)
-example_add = HttpParser.get_add_info_by_id(1861843197)
+example_add = HttpParser.get_add_info_by_id(2178275840) #(1861843197)
 
 
 print(all_categories)

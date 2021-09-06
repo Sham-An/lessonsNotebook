@@ -38,7 +38,7 @@ def region_from_js_to_db():
 
     print("Database opened successfully")
     cur = con.cursor()
-    with open("json/avito_region.json") as file:
+    with open("json/avito_region.json",'r', encoding="utf-8") as file:
         data = json.load(file)
     for item in data['data']:
         print(f"Сохраненный {item['id']} = {item['name']}")
@@ -84,7 +84,7 @@ if __name__ == '__main__':
     print_hi('PyCharm')
     print_hi('PyCharm3')
     #create_region_db()
-    #region_from_js_to_db()
-    region_list_from_db()
+    region_from_js_to_db()
+    #region_list_from_db()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

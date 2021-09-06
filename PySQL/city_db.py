@@ -38,8 +38,9 @@ def city_from_js_to_db():
 
     print("Database opened successfully")
     cur = con.cursor()
-    with open("json/avito_city.json") as file:
+    with open("json/avito_city.json",'r', encoding="utf-8") as file:
         data = json.load(file)
+        print("Json opened")
     for item in data['data']:
         print(f"Сохраненный {item['id']} = {item['name']} регион {item['parent_Id']}")
         #id_reg = item['id']
